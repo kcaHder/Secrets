@@ -1,5 +1,3 @@
-// Mainframe macro generated from application: /home/marco/root/bin/root.exe
-// By ROOT version 6.12/06 on 2018-05-04 17:18:31
 #ifndef ROOT_TGDockableFrame
 #include "TGDockableFrame.h"
 #endif
@@ -121,6 +119,15 @@ TGNumberEntry *linestyle;
 TGNumberEntry *linecolor;
 TGNumberEntry *linewidth;
 TGComboBox *fComboBox1230;
+TGCheckButton *fitbut;
+TGComboBox *fittype;
+TGTextEntry *fitform;
+TGCheckButton *fitcosm;
+TGNumberEntry *xfitmin;
+TGNumberEntry *xfitmax;
+TGNumberEntry *fitlst;
+TGNumberEntry *fitlcol;
+TGNumberEntry *fitlwd;
 void Gui()
 {
    // main frame
@@ -233,12 +240,15 @@ void Gui()
    markcolor = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,40);
    cosmetics->AddFrame(markcolor, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    markcolor->MoveResize(160,40,60,23);
+   markcolor->SetNumber(4);
    markstyle = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,1,34);
    cosmetics->AddFrame(markstyle, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    markstyle->MoveResize(8,40,60,23);
+   markstyle->SetNumber(20);
    marksize = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 1,1);
    cosmetics->AddFrame(marksize, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    marksize->MoveResize(82,40,60,23);
+   marksize->SetNumber(1);
    TGLabel *fLabel940 = new TGLabel(cosmetics,"Style");
    fLabel940->SetTextJustify(36);
    fLabel940->SetMargins(0,0,0,0);
@@ -260,19 +270,22 @@ void Gui()
    linestyle = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,1,10);
    cosmetics->AddFrame(linestyle, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    linestyle->MoveResize(8,90,60,23);
+   linestyle->SetNumber(1);
    linecolor = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,40);
    cosmetics->AddFrame(linecolor, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    linecolor->MoveResize(82,90,60,23);
+   linecolor->SetNumber(1);
    linewidth = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,1,10);
    cosmetics->AddFrame(linewidth, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    linewidth->MoveResize(160,90,60,23);
+   linewidth->SetNumber(1);
    TGLabel *fLabel1043 = new TGLabel(cosmetics,"Style");
    fLabel1043->SetTextJustify(36);
    fLabel1043->SetMargins(0,0,0,0);
    fLabel1043->SetWrapLength(-1);
    cosmetics->AddFrame(fLabel1043, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    fLabel1043->MoveResize(8,70,64,19);
-   TGLabel *fLabel1050 = new TGLabel(cosmetics,"Color");
+   TGLabel *fLabel1050 = new TGLabel(cosmetics,"Colour");
    fLabel1050->SetTextJustify(36);
    fLabel1050->SetMargins(0,0,0,0);
    fLabel1050->SetWrapLength(-1);
@@ -313,8 +326,120 @@ void Gui()
    fMainFrame1012->AddFrame(gobut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    gobut->MoveResize(312,216,120,40);
 
+
+
+ // "fit" group frame
+   TGGroupFrame *fitframe = new TGGroupFrame(fMainFrame1012,"fitframe");
+   fitframe->SetLayoutBroken(kTRUE);
+   fitbut = new TGCheckButton(fitframe,"Fit");
+   fitbut->SetTextJustify(36);
+   fitbut->SetMargins(0,0,0,0);
+   fitbut->SetWrapLength(-1);
+   fitframe->AddFrame(fitbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitbut->MoveResize(16,24,136,24);
+
+
+   // combo box
+   fittype = new TGComboBox(fitframe,-1,kHorizontalFrame | kSunkenFrame | kOwnBackground);
+   fittype->AddEntry("Costante",0);
+   fittype->AddEntry("Polinom. 1",1);
+   fittype->AddEntry("Gaussiano ",2);
+   fittype->AddEntry("Esponenziale ",3);
+   fittype->AddEntry("Personal. ",4);
+   fittype->AddEntry("Polinom. 2 ",5);
+   fittype->AddEntry("Polinom. 3 ",6);
+   fittype->AddEntry("Polinom. -1 ",-1);
+   fittype->AddEntry("Polinom. -2 ",-2);
+   fittype->AddEntry("Polinom. -3 ",-3);
+   fittype->Resize(144,23);
+   fittype->Select(-1);
+   fitframe->AddFrame(fittype, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fittype->MoveResize(16,60,144,23);
+   fittype->Select(0);
+
+   ufont = gClient->GetFont("-*-helvetica-medium-r-*-*-12-*-*-*-*-*-iso8859-1");
+
+   // graphics context changes
+   GCValues_t valEntry1163;
+   valEntry1163.fMask = kGCForeground | kGCBackground | kGCFillStyle | kGCFont | kGCGraphicsExposures;
+   gClient->GetColorByName("#000000",valEntry1163.fForeground);
+   gClient->GetColorByName("#e8e8e8",valEntry1163.fBackground);
+   valEntry1163.fFillStyle = kFillSolid;
+   valEntry1163.fFont = ufont->GetFontHandle();
+   valEntry1163.fGraphicsExposures = kFALSE;
+   uGC = gClient->GetGC(&valEntry1163, kTRUE);
+   //fit formula
+   fitform = new TGTextEntry(fitframe, new TGTextBuffer(14),-1,uGC->GetGC(),ufont->GetFontStruct(),kSunkenFrame | kOwnBackground);
+   fitform->SetMaxLength(4096);
+   fitform->SetAlignment(kTextLeft);
+   fitform->SetText("Fit Formula");
+   fitform->Resize(176,fitform->GetDefaultHeight());
+   fitframe->AddFrame(fitform, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitform->MoveResize(16,100,176,23);
+
+   fitcosm = new TGCheckButton(fitframe,"Default fit settings");
+   fitcosm->SetTextJustify(36);
+   fitcosm->SetMargins(0,0,0,0);
+   fitcosm->SetWrapLength(-1);
+   fitframe->AddFrame(fitcosm, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitcosm->MoveResize(16,150,136,24);
+   fitcosm->SetOn();
+
+   fitlst = new TGNumberEntry(fitframe, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,10);
+   fitframe->AddFrame(fitlst, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitlst->MoveResize(16,264,60,23);
+   fitlcol = new TGNumberEntry(fitframe, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,40);
+   fitframe->AddFrame(fitlcol, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitlcol->MoveResize(88,264,64,23);
+   fitlwd = new TGNumberEntry(fitframe, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,10);
+   fitframe->AddFrame(fitlwd, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitlwd->MoveResize(160,264,60,23);
+
+   TGLabel *fLabel1218 = new TGLabel(fitframe,"Style");
+   fLabel1218->SetTextJustify(36);
+   fLabel1218->SetMargins(0,0,0,0);
+   fLabel1218->SetWrapLength(-1);
+   fitframe->AddFrame(fLabel1218, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1218->MoveResize(16,240,64,19);
+   TGLabel *fLabel1247 = new TGLabel(fitframe,"Colour");
+   fLabel1247->SetTextJustify(36);
+   fLabel1247->SetMargins(0,0,0,0);
+   fLabel1247->SetWrapLength(-1);
+   fitframe->AddFrame(fLabel1247, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1247->MoveResize(88,240,64,19);
+   TGLabel *fLabel1254 = new TGLabel(fitframe,"Width");
+   fLabel1254->SetTextJustify(36);
+   fLabel1254->SetMargins(0,0,0,0);
+   fLabel1254->SetWrapLength(-1);
+   fitframe->AddFrame(fLabel1254, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1254->MoveResize(160,240,64,19);
+
+
+   xfitmin = new TGNumberEntry(fitframe, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 5);
+   fitframe->AddFrame(xfitmin, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   xfitmin->MoveResize(88,190,60,23);
+   xfitmax = new TGNumberEntry(fitframe, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 5);
+   fitframe->AddFrame(xfitmax, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   xfitmax->MoveResize(160,190,60,23);
+   TGLabel *xran = new TGLabel(fitframe,"X range:");
+   xran->SetTextJustify(36);
+   xran->SetMargins(0,0,0,0);
+   xran->SetWrapLength(-1);
+   fitframe->AddFrame(xran, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   xran->MoveResize(16,192,64,19);
+
+
+
+   fitframe->SetLayoutManager(new TGVerticalLayout(fitframe));
+   fitframe->Resize(240,320);
+   fMainFrame1012->AddFrame(fitframe, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fitframe->MoveResize(496,24,240,320);
+
+
+
+
    fMainFrame1447->AddFrame(fMainFrame1012, new TGLayoutHints(kLHintsExpandX | kLHintsExpandY));
-   fMainFrame1012->MoveResize(0,0,611,451);
+   fMainFrame1012->MoveResize(0,0,800,371);
 
    fMainFrame1447->SetMWMHints(kMWMDecorAll,
                         kMWMFuncAll,
@@ -323,5 +448,5 @@ void Gui()
 
    fMainFrame1447->Resize(fMainFrame1447->GetDefaultSize());
    fMainFrame1447->MapWindow();
-   fMainFrame1447->Resize(490,371);
+   fMainFrame1447->Resize(800,371);
 }  

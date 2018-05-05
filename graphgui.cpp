@@ -161,13 +161,13 @@ void Graph::Filler()
 
 void Graph::Fitter()
 {
-	cout << "Vuoi fittare il grafico(1), oppure no(0)? SETTATO A 0" << endl;
-	graphwannaFit = 0; //InputCheck<bool>()
-	if(graphwannaFit)
+//	cout << "Vuoi fittare il grafico(1), oppure no(0)? SETTATO A 0" << endl;
+//	graphwannaFit = 0; //InputCheck<bool>()
+	if(fitbut->IsOn())
 	{
-		cout << "Vuoi un fit costante(0), polinomiale(1), gaussiano(2), esponenziale(3) o personalizzato(4)?" << endl;
-		graphFitType = InputCheck<unsigned int>();
-		switch(graphFitType)
+		//cout << "Vuoi un fit costante(0), polinomiale(1), gaussiano(2), esponenziale(3) o personalizzato(4)?" << endl;
+		//graphFitType = InputCheck<unsigned int>();
+		switch(fittype->GetSelected())
 		{
 			default:
 			{
@@ -175,6 +175,21 @@ void Graph::Fitter()
 				f = new TF1("f", "pol0");
 				break;
 			}
+			case -3:
+            {
+                f = new TF1("f", "[0]+[1]/x+[2]/(x*x)+[3]/(x*x*x)");
+                break;
+            }
+            case -2:
+            {
+                f = new TF1("f", "[0]+[1]/x+[2]/(x*x)");
+                break;
+            }
+			case -1:
+            {
+                f = new TF1("f", "[0]+[1]/x");
+                break;
+            }
 			case 0:
 			{
 				f = new TF1("f", "pol0");
@@ -182,56 +197,10 @@ void Graph::Fitter()
 			}
 			case 1:
 			{
-				int polDegree;
-				cout << "Dammi il grado del polinomio (tra -3 e 3)" << endl;
-				polDegree = InputCheck<int>();
-				switch(polDegree)
-				{
-					default:
-					{
-						cout << "coglionazzo, ora ti becchi la prima opzione e non discuti" << endl;
-						f = new TF1("f", "[0]+x*[1]");
-						break;
-					}
-					case -3:
-                    {
-                        f = new TF1("f", "[0]+[1]/x+[2]/(x*x)+[3]/(x*x*x)");
-                        break;
-                    }
-                    case -2:
-                    {
-                        f = new TF1("f", "[0]+[1]/x+[2]/(x*x)");
-                        break;
-                    }
-					case -1:
-                    {
-                        f = new TF1("f", "[0]+[1]/x");
-                        break;
-                    }
-                    case 0:
-                    {
-                        cout << "Ma allora non potevi scegliere il fit costante? Adesso ti becchi un fit di 19esimo grado" << endl;
-                        f = new TF1("f", "pol19");
-                        break;
-                    }
-                    case 1:
-                    {
-                        f = new TF1("f", "[0]+[1]*x");
-                        break;
-                    }
-                    case 2:
-                    {
-                        f = new TF1("f", "[0]+[1]*x+[2]*(x*x)");
-                        break;
-                    }
-                    case 3:
-                    {
-                        f = new TF1("f", "[0]+[1]*x+[2]*(x*x)+[3]*(x*x*x)");
-                        break;
-                    }
-				}
-				break;
-			}
+                f = new TF1("f", "[0]+[1]*x");
+                break;
+            }
+			
 			case 2:
 			{
 				f = new TF1("f", "gaus");
@@ -245,16 +214,26 @@ void Graph::Fitter()
 			case 4:
 			{
 				char formula[40];
-				cout << "Inserisci la formula" << endl;
-				cin >> formula;
-				f = new TF1("f", formula);
+				//cout << "Inserisci la formula" << endl;
+				//cin >> formula;
+				f = new TF1("f", fitform->GetDisplayText());
 				break;
 			}
+			case 5:
+            {
+                f = new TF1("f", "[0]+[1]*x+[2]*(x*x)");
+                break;
+            }
+            case 6:
+            {
+                f = new TF1("f", "[0]+[1]*x+[2]*(x*x)+[3]*(x*x*x)");
+                break;
+            }
 		}
-		bool PersonalizedFitCosmetics;
-		cout << "Vuoi parametri di cosmetica del fit standard (0) oppure personalizzati (1)?" << endl;
-		PersonalizedFitCosmetics = InputCheck<bool>();
-		if(PersonalizedFitCosmetics) FitCosmetics();
+		//bool PersonalizedFitCosmetics;
+		//cout << "Vuoi parametri di cosmetica del fit standard (0) oppure personalizzati (1)?" << endl;
+		//PersonalizedFitCosmetics = InputCheck<bool>();
+		if(!(fitcosm->IsOn())) FitCosmetics();
 		else g->Fit("f");
 		
 	}
@@ -262,16 +241,16 @@ void Graph::Fitter()
 void Graph::FitCosmetics()
 {
 	cout << "Dimmi i parametri di stile, colore e spessore della linea del fit. Se non sai cosa mettere, guarda qui: \nhttps://root.cern.ch/doc/master/classTAttLine.html\noppure metti 0 e ci penso io. " << endl;
-	graphFitLineStyle = InputCheck<unsigned int>();
-	graphFitLineColor = InputCheck<unsigned int>();
-	graphFitLineWidth = InputCheck<unsigned int>();
+	graphFitLineStyle = fitlst->GetIntNumber();
+	graphFitLineColor = fitlcol->GetIntNumber();
+	graphFitLineWidth = fitlwd->GetIntNumber();
 	if(graphFitLineStyle) f->SetLineStyle(graphFitLineStyle);
 	if(graphFitLineColor) f->SetLineColor(graphFitLineColor);
 	if(graphFitLineWidth) f->SetLineWidth(graphFitLineWidth);
 	
-	cout << "Dimmi gli estremi del fit sull'asse X" << endl;
-	graphFitMin = InputCheck<double>();
-	graphFitMax = InputCheck<double>();
+	//cout << "Dimmi gli estremi del fit sull'asse X" << endl;
+	graphFitMin = xfitmin->GetNumber();
+	graphFitMax = xfitmax->GetNumber();
 	g->Fit("f", "", "", graphFitMin, graphFitMax);
 }
 
@@ -537,7 +516,6 @@ void Graph:: SetMax(double Max)
 
 void graph()
 {
-	cout << const_cast<char*>(path->GetDisplayText().Data()) << '\n';
 	//Graph filling
 	G->Filler();
 	//Graphs fitting

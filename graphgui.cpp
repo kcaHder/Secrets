@@ -63,9 +63,9 @@ Graph::Graph(int)
 // Questo invece sarebbe senza scrupoli (e valido solo su Mac):
 //	cout << "Dammi il percorso del file (per inserire il percorso puoi trascinare il file sul terminale)" << endl;
 //	cin >> graphFile;
-	cout << "Vuoi un grafico con gli errori su entrambe le variabili(0), con gli errori solo su y (1) o senza (2)?" << endl;
-	graphWoW = InputCheck<unsigned int>();
-	switch(graphWoW)
+	//cout << "Vuoi un grafico con gli errori su entrambe le variabili(0), con gli errori solo su y (1) o senza (2)?" << endl;
+	//graphWoW = InputCheck<unsigned int>();
+	switch(fComboBox1230->GetSelected())
 	{
 		default: cout << "coglionazzo, ora ti becchi la prima opzione e non discuti" << endl;
 		case 0:
@@ -283,36 +283,36 @@ void Graph::Cosmetics(bool PersonalizedCosmetics)
 	}
 	else
 	{
-		cout << "Dimmi i parametri di stile, dimensione e colore del Marker. Se non sai cosa mettere, guarda qui: \nhttps://root.cern.ch/doc/v608/classTAttMarker.html\n oppure metti 0 e ci penso io. " << endl;
-		graphMarkerStyle = InputCheck<unsigned int>();
-		graphMarkerSize = InputCheck<double>();
-		graphMarkerColor = InputCheck<unsigned int>();
-		cout << "Dimmi i parametri di stile, colore e spessore della linea. Se non sai cosa mettere, guarda qui: \nhttps://root.cern.ch/doc/master/classTAttLine.html\n oppure metti 0 e ci penso io. " << endl;
-		graphLineStyle = InputCheck<unsigned int>();
-		graphLineColor = InputCheck<unsigned int>();
-		graphLineWidth = InputCheck<unsigned int>();
+		//cout << "Dimmi i parametri di stile, dimensione e colore del Marker. Se non sai cosa mettere, guarda qui: \nhttps://root.cern.ch/doc/v608/classTAttMarker.html\n oppure metti 0 e ci penso io. " << endl;
+		graphMarkerStyle = markstyle->GetIntNumber();
+		graphMarkerSize = marksize->GetIntNumber();
+		graphMarkerColor = markcolor->GetIntNumber();
+		//cout << "Dimmi i parametri di stile, colore e spessore della linea. Se non sai cosa mettere, guarda qui: \nhttps://root.cern.ch/doc/master/classTAttLine.html\n oppure metti 0 e ci penso io. " << endl;
+		graphLineStyle = linestyle->GetIntNumber();
+		graphLineColor = linecolor->GetIntNumber();
+		graphLineWidth = linewidth->GetIntNumber();
 		g->SetMarkerStyle(graphMarkerStyle);
 		g->SetMarkerSize(graphMarkerSize);
 		g->SetMarkerColor(graphMarkerColor);
 		g->SetLineStyle(graphLineStyle);
 		g->SetLineColor(graphLineColor);
 		g->SetLineWidth(graphLineWidth);
-		cout << "Dammi gli estremi su Y del grafico (metti entrambi 0 per parametri standard)." << endl;
+		/*cout << "Dammi gli estremi su Y del grafico (metti entrambi 0 per parametri standard)." << endl;
 	graphMin = InputCheck<double>();
 	graphMax = InputCheck<double>();
 	if(graphMin || graphMax)
 	{
 		g->SetMinimum(graphMin);
 		g->SetMaximum(graphMax);
-	}
+	}*/
 	}
 }
 
 void Graph::Drawer()
 {
 	bool PersonalizedCosmetics;
-	cout << "Vuoi parametri di cosmetica del grafico standard (0) oppure personalizzati (1)?" << endl;
-	PersonalizedCosmetics = InputCheck<bool>();
+	//cout << "Vuoi parametri di cosmetica del grafico standard (0) oppure personalizzati (1)?" << endl;
+	PersonalizedCosmetics = cosm[0]->IsOn();
 	Cosmetics(PersonalizedCosmetics);
 //	l = new TLegend (.1, .7, .3, .9, "Legenda");
 	c = new TCanvas("c", "Canvas", 10, 20, 400, 600);
@@ -536,7 +536,6 @@ void Graph:: SetMax(double Max)
 
 void graph()
 {
-	cout << load[0]->IsOn()<< '\n';
 	//Graph filling
 	G->Filler();
 	//Graphs fitting

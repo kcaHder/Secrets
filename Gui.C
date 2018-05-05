@@ -109,9 +109,18 @@
 #include "Riostream.h"
 TGTextEntry *titlegraph;
 TGVButtonGroup *loadchoice;
+TGVButtonGroup *cosmchoice;
+TGGroupFrame *cosmetics;
 TGRadioButton *load[2];
-TGVButtonGroup *errorchoice;
-TGRadioButton *err[3];
+TGRadioButton *cosm[2];
+TGNumberEntry *markstyle;
+TGNumberEntry *marksize;
+TGNumberEntry *markcolor;
+TGNumberEntry *linestyle;
+TGNumberEntry *linecolor;
+TGNumberEntry *linewidth;
+//TGVButtonGroup *errorchoice;
+//TGRadioButton *err[3];
 TGComboBox *fComboBox1230;
 void Gui()
 {
@@ -151,26 +160,27 @@ void Gui()
    //TGGroupFrame *datainput = new TGGroupFrame(fMainFrame1012,"data input");
    //datainput->SetLayoutBroken(kTRUE);
    loadchoice = new TGVButtonGroup(fMainFrame1012,"Load preference");
+   loadchoice->SetLayoutBroken(kTRUE);
    load[0] = new TGRadioButton(loadchoice,"upload");
    load[0]->SetTextJustify(36);
    load[0]->SetMargins(0,0,0,0);
    load[0]->SetWrapLength(-1);
    loadchoice->AddFrame(load[0], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   load[0]->MoveResize(24,64,106,20);
+   load[0]->MoveResize(20,40,106,20);
    load[1] = new TGRadioButton(loadchoice,"filename.txt",-1,uGC->GetGC(),ufont->GetFontStruct(),1);
    load[1]->SetTextJustify(36);
    load[1]->SetMargins(0,0,0,0);
    load[1]->SetWrapLength(-1);
    load[1]->SetOn();
-   loadchoice->AddFrame(load[1], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   load[1]->MoveResize(24,32,106,20);
+   loadchoice->AddFrame(load[1], new TGLayoutHints(kLHintsLeft | kLHintsTop,1,2,2,2));
+   load[1]->MoveResize(20,20,106,20);
 
    //datainput->SetLayoutManager(new TGVerticalLayout(datainput));
-   loadchoice->Resize(168,112);
+   //loadchoice->Resize(168,112);
    loadchoice->Show();
    //datainput->AddFrame(loadchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    fMainFrame1012->AddFrame(loadchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   loadchoice->MoveResize(296,24,168,112);
+   loadchoice->MoveResize(296,24,150,80);
 
    // "Errors" group frame
    //TGGroupFrame *errors = new TGGroupFrame(fMainFrame1012,"Errors");
@@ -216,6 +226,110 @@ void Gui()
    fLabel833->SetWrapLength(-1);
    fMainFrame1012->AddFrame(fLabel833, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    fLabel833->MoveResize(8,80,88,19);
+
+
+
+   //cosmeticframe
+   cosmchoice = new TGVButtonGroup(fMainFrame1012,"Cosmetic preferences");
+   cosmchoice->SetLayoutBroken(kTRUE);
+   cosm[0] = new TGRadioButton(cosmchoice,"Personilized");
+   cosm[0]->SetTextJustify(36);
+   cosm[0]->SetMargins(0,0,0,0);
+   cosm[0]->SetWrapLength(-1);
+   cosmchoice->AddFrame(cosm[0], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   cosm[0]->MoveResize(20,40,106,20);
+   cosm[1] = new TGRadioButton(cosmchoice,"Default",-1,uGC->GetGC(),ufont->GetFontStruct(),1);
+   cosm[1]->SetTextJustify(36);
+   cosm[1]->SetMargins(0,0,0,0);
+   cosm[1]->SetWrapLength(-1);
+   cosm[1]->SetOn();
+   cosmchoice->AddFrame(cosm[1], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   cosm[1]->MoveResize(20,20,106,20);
+
+   //datainput->SetLayoutManager(new TGVerticalLayout(datainput));
+   //cosmchoice->Resize(168,112);
+   cosmchoice->Show();
+   //datainput->AddFrame(loadchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fMainFrame1012->AddFrame(cosmchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   cosmchoice->MoveResize(8,150,150,80);
+
+
+// "cosmetics" group frame
+   cosmetics = new TGGroupFrame(fMainFrame1012,"Cosmetics");
+   cosmetics->SetLayoutBroken(kTRUE);
+   markcolor = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,40);
+   cosmetics->AddFrame(markcolor, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   markcolor->MoveResize(160,40,60,23);
+   markstyle = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,1,34);
+   cosmetics->AddFrame(markstyle, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   markstyle->MoveResize(8,40,60,23);
+   marksize = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 1,1);
+   cosmetics->AddFrame(marksize, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   marksize->MoveResize(82,40,60,23);
+   TGLabel *fLabel940 = new TGLabel(cosmetics,"Style");
+   fLabel940->SetTextJustify(36);
+   fLabel940->SetMargins(0,0,0,0);
+   fLabel940->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel940, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel940->MoveResize(8,20,57,19);
+   TGLabel *fLabel947 = new TGLabel(cosmetics,"Size");
+   fLabel947->SetTextJustify(36);
+   fLabel947->SetMargins(0,0,0,0);  
+   fLabel947->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel947, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel947->MoveResize(80,20,57,19);
+   TGLabel *fLabel954 = new TGLabel(cosmetics,"Color");
+   fLabel954->SetTextJustify(36);
+   fLabel954->SetMargins(0,0,0,0);
+   fLabel954->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel954, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel954->MoveResize(160,20,57,19);
+   linestyle = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,1,10);
+   cosmetics->AddFrame(linestyle, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   linestyle->MoveResize(8,90,60,23);
+   linecolor = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,0,40);
+   cosmetics->AddFrame(linecolor, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   linecolor->MoveResize(82,90,60,23);
+   linewidth = new TGNumberEntry(cosmetics, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1,(TGNumberFormat::ELimit) 3,1,10);
+   cosmetics->AddFrame(linewidth, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   linewidth->MoveResize(160,90,60,23);
+   TGLabel *fLabel1043 = new TGLabel(cosmetics,"Style");
+   fLabel1043->SetTextJustify(36);
+   fLabel1043->SetMargins(0,0,0,0);
+   fLabel1043->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel1043, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1043->MoveResize(8,70,64,19);
+   TGLabel *fLabel1050 = new TGLabel(cosmetics,"Color");
+   fLabel1050->SetTextJustify(36);
+   fLabel1050->SetMargins(0,0,0,0);
+   fLabel1050->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel1050, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1050->MoveResize(80,70,64,19);
+   TGLabel *fLabel1057 = new TGLabel(cosmetics,"Width");
+   fLabel1057->SetTextJustify(36);
+   fLabel1057->SetMargins(0,0,0,0);
+   fLabel1057->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel1057, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1057->MoveResize(160,70,64,19);
+   TGLabel *fLabel1172 = new TGLabel(cosmetics,"Marker");
+   fLabel1172->SetTextJustify(36);
+   fLabel1172->SetMargins(0,0,0,0);
+   fLabel1172->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel1172, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1172->MoveResize(226,40,40,19);
+   TGLabel *fLabel1211 = new TGLabel(cosmetics,"Line");
+   fLabel1211->SetTextJustify(36);
+   fLabel1211->SetMargins(0,0,0,0);
+   fLabel1211->SetWrapLength(-1);
+   cosmetics->AddFrame(fLabel1211, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabel1211->MoveResize(222,90,48,19);
+
+   cosmetics->SetLayoutManager(new TGVerticalLayout(cosmetics));
+   cosmetics->Resize(280,136);
+   fMainFrame1012->AddFrame(cosmetics, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   cosmetics->MoveResize(8,232,280,136);
+
+
 
    //gobutton
    TGTextButton *gobut = new TGTextButton(fMainFrame1012,"Go","graph()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);

@@ -6,7 +6,7 @@
 //
 //
 
-#include "graph.hpp"
+#include "graphgui.hpp"
 #include "Gui.C"
 using namespace std;
 Graph* G = new Graph();
@@ -24,7 +24,7 @@ bool OS = 1;
 //private
 
 char* Graph::graphTitle = new char[50];
-char* Graph:: graphFile = new char[300];
+TString Graph:: graphFile;
 //double* Graph:: graphEntriesX = new double[10];
 //double* Graph:: graphEntriesY = new double[10];
 //double* Graph:: graphEntriesEX = new double[10];
@@ -39,7 +39,7 @@ Graph::Graph(){}
 Graph::Graph(int)
 {
 
-	char maybeApostrophe;
+	/*char maybeApostrophe;
 	cout << "Trascina il file sul terminale e premi invio(oppure dammi il percorso del file seguito da uno spazio e da un invio)\n";
     cin.get(maybeApostrophe);
     if(maybeApostrophe == '\'') cin.getline(graphFile, 50, '\'');
@@ -47,7 +47,8 @@ Graph::Graph(int)
     {
     	cin.putback(maybeApostrophe);
     	cin.getline(graphFile, 50, '\ ');
-	}
+	}*/
+	graphFile = path->GetDisplayText().Data();
 //	Probabilmente sarebbe più elegante così:
 /*
 	cout << "Trascina il file sul terminale e premi invio(oppure dammi il percorso del file seguito da uno spazio e da un invio)\n";
@@ -348,7 +349,7 @@ bool Graph:: GetFill()
 {
 	return graphFill;
 }
-char* Graph:: GetFile()
+TString Graph:: GetFile()
 {
 	return graphFile;
 }
@@ -536,6 +537,7 @@ void Graph:: SetMax(double Max)
 
 void graph()
 {
+	cout << const_cast<char*>(path->GetDisplayText().Data()) << '\n';
 	//Graph filling
 	G->Filler();
 	//Graphs fitting
@@ -548,7 +550,7 @@ void graph()
 # ifndef __CINT__
 int main()
 {
-  graph();
+  Gui();
   return 0;
 }
 #endif

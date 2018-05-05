@@ -540,3 +540,11 @@ void graph()
 	
 }
 
+# ifndef __CINT__
+int main()
+{
+  graph();
+  return 0;
+}
+#endif
+

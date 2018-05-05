@@ -108,6 +108,7 @@
 
 #include "Riostream.h"
 TGTextEntry *titlegraph;
+TGTextEntry *path;
 TGVButtonGroup *loadchoice;
 TGVButtonGroup *cosmchoice;
 TGGroupFrame *cosmetics;
@@ -119,8 +120,6 @@ TGNumberEntry *markcolor;
 TGNumberEntry *linestyle;
 TGNumberEntry *linecolor;
 TGNumberEntry *linewidth;
-//TGVButtonGroup *errorchoice;
-//TGRadioButton *err[3];
 TGComboBox *fComboBox1230;
 void Gui()
 {
@@ -133,7 +132,6 @@ void Gui()
    TGCompositeFrame *fMainFrame1012 = new TGCompositeFrame(fMainFrame1447,611,451,kVerticalFrame);
    fMainFrame1012->SetName("fMainFrame1012");
    fMainFrame1012->SetLayoutBroken(kTRUE);
-
    TGFont *ufont;         // will reflect user font changes
    ufont = gClient->GetFont("-*-helvetica-medium-r-*-*-12-*-*-*-*-*-iso8859-1");
 
@@ -157,8 +155,6 @@ void Gui()
    titlegraph->MoveResize(8,32,184,23);
 
    // "data input" group frame
-   //TGGroupFrame *datainput = new TGGroupFrame(fMainFrame1012,"data input");
-   //datainput->SetLayoutBroken(kTRUE);
    loadchoice = new TGVButtonGroup(fMainFrame1012,"Load preference");
    loadchoice->SetLayoutBroken(kTRUE);
    load[0] = new TGRadioButton(loadchoice,"upload");
@@ -174,42 +170,19 @@ void Gui()
    load[1]->SetOn();
    loadchoice->AddFrame(load[1], new TGLayoutHints(kLHintsLeft | kLHintsTop,1,2,2,2));
    load[1]->MoveResize(20,20,106,20);
-
-   //datainput->SetLayoutManager(new TGVerticalLayout(datainput));
-   //loadchoice->Resize(168,112);
    loadchoice->Show();
-   //datainput->AddFrame(loadchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    fMainFrame1012->AddFrame(loadchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    loadchoice->MoveResize(296,24,150,80);
 
-   // "Errors" group frame
-   //TGGroupFrame *errors = new TGGroupFrame(fMainFrame1012,"Errors");
-   //errors->SetLayoutBroken(kTRUE);
-   /*errorchoice = new TGVButtonGroup(fMainFrame1012,"Errors");
-   err[0] = new TGRadioButton(errorchoice,"both");
-   err[0]->SetTextJustify(36);
-   err[0]->SetMargins(0,0,0,0);
-   err[0]->SetWrapLength(-1);
-   errorchoice->AddFrame(err[0], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   err[0]->MoveResize(24,24,113,20);
-   err[1] = new TGRadioButton(errorchoice,"y");
-   err[1]->SetTextJustify(36);
-   err[1]->SetMargins(0,0,0,0);
-   err[1]->SetWrapLength(-1);
-   errorchoice->AddFrame(err[1], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   err[1]->MoveResize(24,48,113,20);
-   err[2] = new TGRadioButton(errorchoice,"x");
-   err[2]->SetTextJustify(36);
-   err[2]->SetMargins(0,0,0,0);
-   err[2]->SetWrapLength(-1);
-   errorchoice->AddFrame(err[2], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   err[2]->MoveResize(24,72,113,20);
+   path = new TGTextEntry(fMainFrame1012, new TGTextBuffer(14),-1,uGC->GetGC(),ufont->GetFontStruct(),kSunkenFrame | kOwnBackground);
+   path->SetMaxLength(4096);
+   path->SetAlignment(kTextLeft);
+   path->SetText("/path");
+   path->Resize(184,path->GetDefaultHeight());
+   path->SetToolTipText("title");
+   fMainFrame1012->AddFrame(path, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   path->MoveResize(296,110,150,23);
 
-   //errors->SetLayoutManager(new TGVerticalLayout(errors));
-   errorchoice->Resize(152,112);
-   errorchoice->Show();
-   fMainFrame1012->AddFrame(errorchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   errorchoice->MoveResize(24,104,152,112);*/
    // combo box
    fComboBox1230 = new TGComboBox(fMainFrame1012,-1,kHorizontalFrame | kSunkenFrame | kOwnBackground);
    fComboBox1230->SetName("Errors");

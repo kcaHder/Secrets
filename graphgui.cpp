@@ -13,10 +13,13 @@ Graph* G = new Graph();
 
 
 
-
 #if defined(__linux__)
 
 bool OS = 1;
+
+#else
+
+bool OS = 0;
 
 #endif
 

@@ -109,6 +109,7 @@
 
 const char *filetypes[] = { 
    "TXT files",    "*.txt",
+   "CSV files",    "*.csv",
    "All files",     "*",
    0,               0 
 };
@@ -173,13 +174,13 @@ void Gui()
    // "data input" group frame
    loadchoice = new TGVButtonGroup(fMainFrame1012,"Load preference");
    loadchoice->SetLayoutBroken(kTRUE);
-   load[0] = new TGRadioButton(loadchoice,"upload");
+   load[0] = new TGRadioButton(loadchoice,"Load data");
    load[0]->SetTextJustify(36);
    load[0]->SetMargins(0,0,0,0);
    load[0]->SetWrapLength(-1);
    loadchoice->AddFrame(load[0], new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    load[0]->MoveResize(20,40,106,20);
-   load[1] = new TGRadioButton(loadchoice,"filename.txt",-1,uGC->GetGC(),ufont->GetFontStruct(),1);
+   load[1] = new TGRadioButton(loadchoice,"New file",-1,uGC->GetGC(),ufont->GetFontStruct(),1);
    load[1]->SetTextJustify(36);
    load[1]->SetMargins(0,0,0,0);
    load[1]->SetWrapLength(-1);
@@ -190,7 +191,7 @@ void Gui()
    fMainFrame1012->AddFrame(loadchoice, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    loadchoice->MoveResize(296,24,150,80);
 
-   path = new TGTextEntry(fMainFrame1012, new TGTextBuffer(14),-1,uGC->GetGC(),ufont->GetFontStruct(),kSunkenFrame | kOwnBackground);
+   /*path = new TGTextEntry(fMainFrame1012, new TGTextBuffer(14),-1,uGC->GetGC(),ufont->GetFontStruct(),kSunkenFrame | kOwnBackground);
    path->SetMaxLength(4096);
    path->SetAlignment(kTextLeft);
    path->SetText("/path");
@@ -198,7 +199,7 @@ void Gui()
    path->SetToolTipText("title");
    fMainFrame1012->AddFrame(path, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    path->MoveResize(296,110,150,23);
-
+*/
    // combo box
    fComboBox1230 = new TGComboBox(fMainFrame1012,-1,kHorizontalFrame | kSunkenFrame | kOwnBackground);
    fComboBox1230->SetName("Errors");
@@ -333,14 +334,22 @@ void Gui()
    gobut->SetWrapLength(-1);
    gobut->Resize(120,40);
    fMainFrame1012->AddFrame(gobut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   gobut->MoveResize(312,216,120,40);
+   gobut->MoveResize(332,232,120,40);
+   //exitbutton
+   TGTextButton *exbut = new TGTextButton(fMainFrame1012,"Exit",".qqqq",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+   exbut->SetTextJustify(36);
+   exbut->SetMargins(0,0,0,0);
+   exbut->SetWrapLength(-1);
+   exbut->Resize(120,40);
+   fMainFrame1012->AddFrame(exbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   exbut->MoveResize(332,292,120,40);
 
 
 
  // "fit" group frame
-   TGGroupFrame *fitframe = new TGGroupFrame(fMainFrame1012,"fitframe");
+   TGGroupFrame *fitframe = new TGGroupFrame(fMainFrame1012,"Fit");
    fitframe->SetLayoutBroken(kTRUE);
-   fitbut = new TGCheckButton(fitframe,"Fit");
+   fitbut = new TGCheckButton(fitframe,"Enable fit");
    fitbut->SetTextJustify(36);
    fitbut->SetMargins(0,0,0,0);
    fitbut->SetWrapLength(-1);
@@ -479,7 +488,7 @@ void Gui()
 
    fMainFrame1447->Resize(fMainFrame1447->GetDefaultSize());
    fMainFrame1447->MapWindow();
-   fMainFrame1447->Resize(800,371);
+   fMainFrame1447->Resize(744,371);
 }  
 
 

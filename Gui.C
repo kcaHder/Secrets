@@ -458,11 +458,25 @@ void Gui()
 //fileup
 
    
-   
+   /*
 
 
+// canvas widget
+   TGCanvas *fCanvas558 = new TGCanvas(fMainFrame1012,232,144,kSunkenFrame);
+   fCanvas558->SetName("fCanvas558");
 
+   // canvas viewport
+   TGViewPort *fViewPort559 = fCanvas558->GetViewPort();
+   TGCompositeFrame *fCompositeFrame568 = new TGCompositeFrame(fViewPort559,230,142,kHorizontalFrame | kOwnBackground);
+   fCompositeFrame568->SetName("fCompositeFrame568");
+   fCompositeFrame568->SetLayoutManager(new TGTileLayout(fCompositeFrame568,8));
+   fCompositeFrame568->MapSubwindows();
+   fCanvas558->SetContainer(fCompositeFrame568);
+   fCanvas558->MapSubwindows();
+   fMainFrame1012->AddFrame(fCanvas558, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fCanvas558->MoveResize(80,72,232,144);
 
+*/
 
 
 

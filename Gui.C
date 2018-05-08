@@ -103,8 +103,17 @@
 #ifndef ROOT_TGuiBldDragManager
 #include "TGuiBldDragManager.h"
 #endif
+#include "TGClient.h"
 
 #include "Riostream.h"
+
+const char *filetypes[] = { 
+   "TXT files",    "*.txt",
+   "All files",     "*",
+   0,               0 
+};
+TString dir(".");
+TGMainFrame *fMainFrame1447;
 TGTextEntry *titlegraph;
 TGTextEntry *path;
 TGVButtonGroup *loadchoice;
@@ -131,7 +140,7 @@ TGNumberEntry *fitlwd;
 void Gui()
 {
    // main frame
-   TGMainFrame *fMainFrame1447 = new TGMainFrame(gClient->GetRoot(),10,10,kMainFrame | kVerticalFrame);
+   fMainFrame1447 = new TGMainFrame(gClient->GetRoot(),10,10,kMainFrame | kVerticalFrame);
    fMainFrame1447->SetName("fMainFrame1447");
    fMainFrame1447->SetLayoutBroken(kTRUE);
 
@@ -437,6 +446,28 @@ void Gui()
 
 
 
+//fileup
+
+   
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    fMainFrame1447->AddFrame(fMainFrame1012, new TGLayoutHints(kLHintsExpandX | kLHintsExpandY));
    fMainFrame1012->MoveResize(0,0,800,371);
@@ -450,3 +481,15 @@ void Gui()
    fMainFrame1447->MapWindow();
    fMainFrame1447->Resize(800,371);
 }  
+
+
+
+void fileup()
+{
+
+   TGFileInfo fi;
+   fi.fFileTypes = filetypes;
+
+   new TGFileDialog(gClient->GetRoot(), fMainFrame1447, kFDOpen, &fi);
+   dir = fi.fFilename;
+}

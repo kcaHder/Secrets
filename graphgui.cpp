@@ -51,7 +51,7 @@ Graph::Graph(int)
     	cin.putback(maybeApostrophe);
     	cin.getline(graphFile, 50, '\ ');
 	}*/
-	graphFile = path->GetDisplayText().Data();
+	graphFile = dir;
 //	Probabilmente sarebbe più elegante così:
 /*
 	cout << "Trascina il file sul terminale e premi invio(oppure dammi il percorso del file seguito da uno spazio e da un invio)\n";
@@ -519,6 +519,7 @@ void Graph:: SetMax(double Max)
 
 void graph()
 {
+	if (load[0]->IsOn()) fileup();
 	//Graph filling
 	G->Filler();
 	//Graphs fitting

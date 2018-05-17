@@ -66,7 +66,7 @@ template <class X> X InputCheck()
 		{
 			std::cin.clear();
 			char c;
-			do; while((c = std::cin.get()) != '\n');
+			do{} while((c = std::cin.get()) != '\n');
 			std::cout << "\a";
 			std::cout << "Perchè mi fai questo? Riprova con un input valido.\n";
 			TypeSorter(Input);
@@ -78,7 +78,7 @@ template <class X> X InputCheck()
 			std::cout << "\a";
 			std::cout << "Non inserire spazi o caratteri, per piacere.. Ti ho chiesto un input valido\n";
 			char c;
-			do;
+			do{}
 			while((c=std::cin.get())!='\n');
 			continue;
 		}

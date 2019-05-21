@@ -117,8 +117,8 @@ Graph::Graph(double)
 	
 	/*cout << "Sei su Mac (0) o su Linux (1)?\n";
 	OS = InputCheck<bool>();*/
-	if(!OS) system("touch filename.txt | open -a TextEdit filename.txt");
-	else system("gedit filename.txt");
+	if(!OS) auto a = system("touch filename.txt | open -a TextEdit filename.txt");
+	else auto a = system("gedit filename.txt");
 	/*cout << "Vuoi un grafico con gli errori su entrambe le variabili(0), con gli errori solo su y (1) o senza (2)?" << endl;
 	graphWoW = InputCheck<unsigned int>();*/
 	switch(fComboBox1230->GetSelected())

@@ -13,13 +13,19 @@ Graph* G = new Graph();
 
 
 
-#if defined(__linux__)
+#ifdef __linux__
 
-bool OS = 1;
+int8_t OS = 2;
+
+#elif __APPLE__ || __MACH__
+
+int8_t OS = 0;
+
+#elif _WIN32 || _WIN64
+int8_t OS = 2;
 
 #else
-
-bool OS = 0;
+int8_t OS = 32;
 
 #endif
 
@@ -117,8 +123,7 @@ Graph::Graph(double)
 	
 	/*cout << "Sei su Mac (0) o su Linux (1)?\n";
 	OS = InputCheck<bool>();*/
-	if(!OS) auto a = system("touch filename.txt | open -a TextEdit filename.txt");
-	else auto a = system("gedit filename.txt");
+
 	/*cout << "Vuoi un grafico con gli errori su entrambe le variabili(0), con gli errori solo su y (1) o senza (2)?" << endl;
 	graphWoW = InputCheck<unsigned int>();*/
 	switch(fComboBox1230->GetSelected())
@@ -151,7 +156,14 @@ void Graph::Filler()
 	//cout << "Vuoi aprire 'filename.txt' e salvare i valori (0) oppure caricare un file (1)?" << endl;
 	//graphFill = InputCheck<bool>();
 	if(load[0]->IsOn()) Graph(619);
-	else Graph(6.9);
+	else 
+	{
+		if(OS == 0) auto a = system("touch filename.txt | open -a TextEdit filename.txt");
+		else if (OS == 1) auto a = system("gedit filename.txt");
+		else if (OS == 2) auto a = system("echo \"\" > filename.txt || Notepad filename.txt");
+		else cerr << "UNABLE TO IDENTIFY OS, ONLY LOADING DATA IS AVAILABLE\n LOADING FILE filename.txt...\n";
+			Graph(6.9);
+	}
 //	{
 //		cout << "Vuoi digitare da terminale (0) o SALVARLI IN UN FILE DI TESTO (OPZIONE CONSIGLIATA) (1)?" << endl;
 //		graphInputType = InputCheck<bool>();

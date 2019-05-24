@@ -9,7 +9,7 @@
 #include "histogram2.hpp"
 
 using namespace std;
-
+/*
 // gestione errori input
 template <class X> X InputCheck()
 {
@@ -29,7 +29,7 @@ template <class X> X InputCheck()
 		break;
 	} while(true);
 	return Input;
-}
+}*/
 
 //static
 //  private

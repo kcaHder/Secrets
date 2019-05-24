@@ -544,7 +544,7 @@ void graph()
 # ifndef __CINT__
 int main()
 {
-  Gui();
+  graphgui();
   return 0;
 }
 #endif

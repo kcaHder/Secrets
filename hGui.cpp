@@ -115,9 +115,16 @@ const char *filetypes[] = {
 };
 TString dir(".");
 TGMainFrame *fMainFrame1447;
-TGTextEntry *titlegraph;
+TGTextEntry *titlehist;
 TGTextEntry *path;
 TGVButtonGroup *loadchoice;
+TGGroupFrame *HistDataSize;
+TGNumberEntry *HBin;
+TGNumberEntry *HMin;
+TGNumberEntry *HMax;
+
+
+
 TGVButtonGroup *cosmchoice;
 TGGroupFrame *cosmetics;
 TGRadioButton *load[2];
@@ -128,6 +135,7 @@ TGNumberEntry *markcolor;
 TGNumberEntry *linestyle;
 TGNumberEntry *linecolor;
 TGNumberEntry *linewidth;
+TGCheckButton *genbut;
 TGComboBox *fComboBox1230;
 TGCheckButton *fitbut;
 TGComboBox *fittype;
@@ -138,7 +146,26 @@ TGNumberEntry *xfitmax;
 TGNumberEntry *fitlst;
 TGNumberEntry *fitlcol;
 TGNumberEntry *fitlwd;
-void graphgui()
+
+TGMainFrame *fMainFrame2;
+TGCompositeFrame *asd;
+
+TGNumberEntry *En;
+TGNumberEntry *UMin;
+TGNumberEntry *UMax;
+TGNumberEntry *GMean;
+TGNumberEntry *GSigma;
+TGNumberEntry *EMean;
+TGNumberEntry *PMean;
+TGNumberEntry *BProb;
+TGNumberEntry *LLoc;
+TGNumberEntry *LScale;
+
+
+TGTextButton *setbut;
+
+
+void histogui()
 {
    // main frame
    fMainFrame1447 = new TGMainFrame(gClient->GetRoot(),10,10,kMainFrame | kVerticalFrame);
@@ -162,14 +189,14 @@ void graphgui()
    valgraph.fFont = ufont->GetFontHandle();
    valgraph.fGraphicsExposures = kFALSE;
    uGC = gClient->GetGC(&valgraph, kTRUE);
-   titlegraph = new TGTextEntry(fMainFrame1012, new TGTextBuffer(14),-1,uGC->GetGC(),ufont->GetFontStruct(),kSunkenFrame | kOwnBackground);
-   titlegraph->SetMaxLength(4096);
-   titlegraph->SetAlignment(kTextLeft);
-   titlegraph->SetText("Graph title");
-   titlegraph->Resize(184,titlegraph->GetDefaultHeight());
-   titlegraph->SetToolTipText("title");
-   fMainFrame1012->AddFrame(titlegraph, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   titlegraph->MoveResize(8,32,184,23);
+   titlehist = new TGTextEntry(fMainFrame1012, new TGTextBuffer(14),-1,uGC->GetGC(),ufont->GetFontStruct(),kSunkenFrame | kOwnBackground);
+   titlehist->SetMaxLength(4096);
+   titlehist->SetAlignment(kTextLeft);
+   titlehist->SetText("Histogram");
+   titlehist->Resize(184,titlehist->GetDefaultHeight());
+   titlehist->SetToolTipText("title");
+   fMainFrame1012->AddFrame(titlehist, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   titlehist->MoveResize(8,32,184,23);
 
    // "data input" group frame
    loadchoice = new TGVButtonGroup(fMainFrame1012,"Load preference");
@@ -200,23 +227,82 @@ void graphgui()
    fMainFrame1012->AddFrame(path, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
    path->MoveResize(296,110,150,23);
 */
+   //Histogram size
+   HistDataSize = new TGGroupFrame(fMainFrame1012,"Histogram Range");
+   HistDataSize->SetLayoutBroken(kTRUE);
+   HBin = new TGNumberEntry(HistDataSize, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1);
+   HistDataSize->AddFrame(HBin, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   HBin->MoveResize(8,40,60,23);
+   HBin->SetNumber(0);
+   HMin = new TGNumberEntry(HistDataSize, (Double_t) 0,6,-1);
+   HistDataSize->AddFrame(HMin, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   HMin->MoveResize(82,40,60,23);
+   HMin->SetNumber(0);
+   HMax = new TGNumberEntry(HistDataSize, (Double_t) 0,6,-1);
+   HistDataSize->AddFrame(HMax, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   HMax->MoveResize(160,40,60,23);
+   HMax->SetNumber(0);
+   TGLabel *fLabelbin = new TGLabel(HistDataSize,"Bin");
+   fLabelbin->SetTextJustify(36);
+   fLabelbin->SetMargins(0,0,0,0);
+   fLabelbin->SetWrapLength(-1);
+   HistDataSize->AddFrame(fLabelbin, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabelbin->MoveResize(8,20,57,19);
+   TGLabel *fLabelmin = new TGLabel(HistDataSize,"Min");
+   fLabelmin->SetTextJustify(36);
+   fLabelmin->SetMargins(0,0,0,0);  
+   fLabelmin->SetWrapLength(-1);
+   HistDataSize->AddFrame(fLabelmin, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabelmin->MoveResize(80,20,57,19);
+   TGLabel *fLabelmax = new TGLabel(HistDataSize,"Max");
+   fLabelmax->SetTextJustify(36);
+   fLabelmax->SetMargins(0,0,0,0);
+   fLabelmax->SetWrapLength(-1);
+   HistDataSize->AddFrame(fLabelmax, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabelmax->MoveResize(160,20,57,19);
+
+   HistDataSize->Resize(280,136);
+   fMainFrame1012->AddFrame(HistDataSize, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   HistDataSize->MoveResize(212,114,228,100);
+
    // combo box
+   genbut = new TGCheckButton(fMainFrame1012,"Generation Distribution");
+   genbut->SetTextJustify(36);
+   genbut->SetMargins(0,0,0,0);
+   genbut->SetWrapLength(-1);
+   fMainFrame1012->AddFrame(genbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   genbut->MoveResize(8,88,148,23);
+   genbut->SetEnabled(kFALSE);
+
+
    fComboBox1230 = new TGComboBox(fMainFrame1012,-1,kHorizontalFrame | kSunkenFrame | kOwnBackground);
-   fComboBox1230->SetName("Errors");
-   fComboBox1230->AddEntry("Both",0);
-   fComboBox1230->AddEntry("Y",1);
-   fComboBox1230->AddEntry("None ",2);
+   fComboBox1230->SetName("Generation Distribution");
+   fComboBox1230->AddEntry("Uniform [0,1]",0);
+   fComboBox1230->AddEntry("Uniform [a,b]",1);
+   fComboBox1230->AddEntry("Gaussian ",2);
+   fComboBox1230->AddEntry("Exponential ",3);
+   fComboBox1230->AddEntry("Poissonian ",4);
+   fComboBox1230->AddEntry("Binomial ",5);
+   fComboBox1230->AddEntry("Landau ",6);
    fComboBox1230->Resize(102,23);
    fComboBox1230->Select(0);
    fMainFrame1012->AddFrame(fComboBox1230, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   fComboBox1230->MoveResize(8,104,102,23);
-   TGLabel *fLabel833 = new TGLabel(fMainFrame1012,"Errors");
-   fLabel833->SetTextJustify(36);
-   fLabel833->SetMargins(0,0,0,0);
-   fLabel833->SetWrapLength(-1);
-   fMainFrame1012->AddFrame(fLabel833, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
-   fLabel833->MoveResize(8,80,88,19);
+   fComboBox1230->MoveResize(8,114,102,23);
+   //TGLabel *fLabel833 = new TGLabel(fMainFrame1012,"Generation Distribution");
+   //fLabel833->SetTextJustify(36);
+   //fLabel833->SetMargins(0,0,0,0);
+   //fLabel833->SetWrapLength(-1);
+   //fMainFrame1012->AddFrame(fLabel833, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   //fLabel833->MoveResize(25,90,130,19);
+   fComboBox1230->SetEnabled(kFALSE);
 
+   TGTextButton *propdistr = new TGTextButton(fMainFrame1012,"Prop...",".!echo This functionality is not yet available!\n",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+   propdistr->SetTextJustify(36);
+   propdistr->SetMargins(0,0,0,0);
+   propdistr->SetWrapLength(-1);
+   propdistr->Resize(120,40);
+   fMainFrame1012->AddFrame(propdistr, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   propdistr->MoveResize(120,114,50,20);
 
 
    //cosmeticframe
@@ -328,7 +414,7 @@ void graphgui()
 
 
    //gobutton
-   TGTextButton *gobut = new TGTextButton(fMainFrame1012,"Go","graph()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+   TGTextButton *gobut = new TGTextButton(fMainFrame1012,"Go","histogram()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
    gobut->SetTextJustify(36);
    gobut->SetMargins(0,0,0,0);
    gobut->SetWrapLength(-1);
@@ -505,7 +591,353 @@ void graphgui()
    fMainFrame1447->Resize(744,371);
 }  
 
+void genparam()
+{
 
+   fMainFrame2 = new TGMainFrame(gClient->GetRoot(),10,10,kMainFrame | kVerticalFrame);
+   fMainFrame2->SetName("fMainFrame2");
+   fMainFrame2->SetLayoutBroken(kTRUE);
+
+   asd = new TGCompositeFrame(fMainFrame2,611,451,kVerticalFrame);
+   asd->SetName("asd");
+   asd->SetLayoutBroken(kTRUE);
+   TGFont *ufont2;         // will reflect user font changes
+   ufont2 = gClient->GetFont("-*-helvetica-medium-r-*-*-12-*-*-*-*-*-iso8859-1");
+
+   TGGC   *uGC2;           // will reflect user GC changes
+   // graphics context changes
+   GCValues_t valgraph2;
+   valgraph2.fMask = kGCForeground | kGCBackground | kGCFillStyle | kGCFont | kGCGraphicsExposures;
+   gClient->GetColorByName("#000000",valgraph2.fForeground);
+   gClient->GetColorByName("#e8e8e8",valgraph2.fBackground);
+   valgraph2.fFillStyle = kFillSolid;
+   valgraph2.fFont = ufont2->GetFontHandle();
+   valgraph2.fGraphicsExposures = kFALSE;
+   uGC2 = gClient->GetGC(&valgraph2, kTRUE);
+
+   fMainFrame2->AddFrame(asd, new TGLayoutHints(kLHintsExpandX | kLHintsExpandY));
+   asd->MoveResize(0,0,600,200);
+
+   
+
+   switch(fComboBox1230->GetSelected())
+   {
+      default: break;
+
+      case 0:
+      {
+         En = new TGNumberEntry(asd, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->CloseWindow()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+         break; 
+      }
+      case 1:
+      {
+
+         UMin = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(UMin, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         UMin->MoveResize(8,30,60,23);
+         
+         UMax = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(UMax, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         UMax->MoveResize(82,30,60,23);
+        
+
+         TGLabel *fLab0 = new TGLabel(asd,"From");
+         fLab0->SetTextJustify(36);
+         fLab0->SetMargins(0,0,0,0);
+         fLab0->SetWrapLength(-1);
+         asd->AddFrame(fLab0, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab0->MoveResize(8,10,57,19);
+
+         TGLabel *fLab1 = new TGLabel(asd,"To");
+         fLab1->SetTextJustify(36);
+         fLab1->SetMargins(0,0,0,0);
+         fLab1->SetWrapLength(-1);
+         asd->AddFrame(fLab1, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab1->MoveResize(82,10,57,19);
+
+         En = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->SendCloseMessage()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+
+
+         break;
+      }
+      case 2:
+      {
+
+         GMean = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(GMean, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         GMean->MoveResize(8,30,60,23);
+         
+         GSigma = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(GSigma, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         GSigma->MoveResize(82,30,60,23);
+         
+
+         TGLabel *fLab2 = new TGLabel(asd,"Mean");
+         fLab2->SetTextJustify(36);
+         fLab2->SetMargins(0,0,0,0);
+         fLab2->SetWrapLength(-1);
+         asd->AddFrame(fLab2, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab2->MoveResize(8,10,57,19);
+
+         TGLabel *fLab3 = new TGLabel(asd,"Sigma");
+         fLab3->SetTextJustify(36);
+         fLab3->SetMargins(0,0,0,0);
+         fLab3->SetWrapLength(-1);
+         asd->AddFrame(fLab3, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab3->MoveResize(82,10,57,19);
+
+         En = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->SendCloseMessage()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+         break;
+      }
+      case 3:
+      {
+         EMean = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(EMean, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         EMean->MoveResize(8,30,60,23);
+         
+
+         TGLabel *fLab2 = new TGLabel(asd,"Mean");
+         fLab2->SetTextJustify(36);
+         fLab2->SetMargins(0,0,0,0);
+         fLab2->SetWrapLength(-1);
+         asd->AddFrame(fLab2, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab2->MoveResize(8,10,57,19);
+
+         En = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->SendCloseMessage()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+         break;
+      }
+      case 4:
+      {
+         PMean = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(PMean, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         PMean->MoveResize(8,30,60,23);
+         
+
+         TGLabel *fLab2 = new TGLabel(asd,"Mean");
+         fLab2->SetTextJustify(36);
+         fLab2->SetMargins(0,0,0,0);
+         fLab2->SetWrapLength(-1);
+         asd->AddFrame(fLab2, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab2->MoveResize(8,10,57,19);
+
+         En = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->SendCloseMessage()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+         break;
+      }
+      case 5:
+      {
+         BProb = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(BProb, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         BProb->MoveResize(8,30,60,23);
+         
+
+         TGLabel *fLab2 = new TGLabel(asd,"Probability");
+         fLab2->SetTextJustify(36);
+         fLab2->SetMargins(0,0,0,0);
+         fLab2->SetWrapLength(-1);
+         asd->AddFrame(fLab2, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab2->MoveResize(8,10,57,19);
+
+         En = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->SendCloseMessage()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+
+         break;
+      }
+      case 6:
+      {
+         LLoc = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(LLoc, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         LLoc->MoveResize(8,30,60,23);
+        
+         LScale = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(LScale, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         LScale->MoveResize(82,30,60,23);
+         
+
+         TGLabel *fLab2 = new TGLabel(asd,"Location");
+         fLab2->SetTextJustify(36);
+         fLab2->SetMargins(0,0,0,0);
+         fLab2->SetWrapLength(-1);
+         asd->AddFrame(fLab2, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab2->MoveResize(8,10,57,19);
+
+         TGLabel *fLab3 = new TGLabel(asd,"Scale");
+         fLab3->SetTextJustify(36);
+         fLab3->SetMargins(0,0,0,0);
+         fLab3->SetWrapLength(-1);
+         asd->AddFrame(fLab3, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLab3->MoveResize(82,10,57,19);
+
+          En = new TGNumberEntry(asd, (Double_t) 0,6,-1);
+         asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         En->MoveResize(156,30,60,23);
+         
+
+         TGLabel *fLaben = new TGLabel(asd,"Entries");
+         fLaben->SetTextJustify(36);
+         fLaben->SetMargins(0,0,0,0);
+         fLaben->SetWrapLength(-1);
+         asd->AddFrame(fLaben, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         fLaben->MoveResize(156,10,57,19);
+
+         setbut = new TGTextButton(asd,"Set","fMainFrame2->SendCloseMessage()",-1,TGTextButton::GetDefaultGC()(),TGTextButton::GetDefaultFontStruct(),kRaisedFrame);
+         setbut->SetTextJustify(36);
+         setbut->SetMargins(0,0,0,0);
+         setbut->SetWrapLength(-1);
+         setbut->Resize(120,40);
+         asd->AddFrame(setbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+         setbut->MoveResize(250,30,50,20);
+         break;
+      }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   fMainFrame2->SetMWMHints(kMWMDecorAll,
+                        kMWMFuncAll,
+                        kMWMInputModeless);
+   fMainFrame2->MapSubwindows();
+
+   fMainFrame2->Resize(fMainFrame2->GetDefaultSize());
+   fMainFrame2->MapWindow();
+   fMainFrame2->Resize(310,70);
+
+}
 
 void fileup()
 {

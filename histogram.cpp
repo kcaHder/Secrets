@@ -7,6 +7,7 @@
 //
 #include "histogram.hpp"
 
+
 using namespace std;
 Histogram* H = new Histogram();
 

@@ -130,7 +130,9 @@ TGNumberEntry *linecolor;
 TGNumberEntry *linewidth;
 TGComboBox *fComboBox1230;
 TGCheckButton *fitbut;
+TGCheckButton *savbut;
 TGComboBox *fittype;
+TGComboBox *savetype;
 TGTextEntry *fitform;
 TGCheckButton *fitcosm;
 TGNumberEntry *xfitmin;
@@ -454,6 +456,42 @@ void graphgui()
    fitframe->MoveResize(496,24,240,320);
 
 
+
+   //Saving canvas
+   TGGroupFrame *saveframe = new TGGroupFrame(fMainFrame1012,"Save canvas");
+   saveframe->SetLayoutBroken(kTRUE);
+   savbut = new TGCheckButton(saveframe,"Enable");
+   savbut->SetTextJustify(36);
+   savbut->SetMargins(0,0,0,0);
+   savbut->SetWrapLength(-1);
+   saveframe->AddFrame(savbut, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   savbut->MoveResize(16,24,80,24);
+
+   savetype = new TGComboBox(saveframe,-1,kHorizontalFrame | kSunkenFrame | kOwnBackground);
+   savetype->AddEntry("PDF",0);
+   savetype->AddEntry("ROOT file",1);
+   savetype->AddEntry("PNG ",2);
+   savetype->AddEntry("XML ",3);
+   savetype->AddEntry("JPEG ",4);
+   savetype->AddEntry("TEX ",5);
+   savetype->AddEntry("SVG ",6);
+   savetype->Resize(144,23);
+   savetype->Select(-1);
+   saveframe->AddFrame(savetype, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   savetype->MoveResize(65,55,80,23);
+   savetype->Select(0);
+
+   TGLabel *fLabelsave = new TGLabel(saveframe,"Format: ");
+   fLabelsave->SetTextJustify(36);
+   fLabelsave->SetMargins(0,0,0,0);
+   fLabelsave->SetWrapLength(-1);
+   saveframe->AddFrame(fLabelsave, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   fLabelsave->MoveResize(16,55,42,19);
+
+   saveframe->SetLayoutManager(new TGVerticalLayout(saveframe));
+   saveframe->Resize(240,320);
+   fMainFrame1012->AddFrame(saveframe, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
+   saveframe->MoveResize(296,124,160,100);
 
 //fileup
 

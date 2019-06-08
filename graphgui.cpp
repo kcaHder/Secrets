@@ -319,11 +319,72 @@ void Graph::Drawer()
 		gStyle->SetOptFit();
 	}
 	g->SetTitle(titlegraph->GetDisplayText().Data());
-	
-	g->Draw();
+	g->Draw("AP");
 	g->DrawPanel();
+	c->SetWindowSize(800,500);
 //	l->Draw();
 	c->Draw();
+
+	if(savbut->IsOn())
+	{
+		TString t = titlegraph->GetDisplayText().Data();
+		//cout << "Vuoi un fit costante(0), polinomiale(1), gaussiano(2), esponenziale(3) o personalizzato(4)?" << endl;
+		//graphFitType = InputCheck<unsigned int>();
+		switch(savetype->GetSelected())
+		{
+			default:
+			{
+				cout << "coglionazzo, ora ti becchi la prima opzione e non discuti" << endl;
+				f = new TF1("f", "pol0");
+				break;
+			}
+			case 0:
+			{
+				TString type = ".pdf";
+				c->SaveAs(t+type);
+				break;
+			}
+			case 1:
+			{
+                TString type = ".root";
+				c->SaveAs(t+type);
+                break;
+            }
+			
+			case 2:
+			{
+				TString type = ".png";
+				c->SaveAs(t+type);
+				break;
+			}
+			case 3:
+			{
+				TString type = ".xml";
+				c->SaveAs(t+type);
+				break;
+			}
+			case 4:
+			{
+				TString type = ".jpg";
+				c->SaveAs(t+type);
+				break;
+			}
+			case 5:
+            {
+                TString type = ".tex";
+				c->SaveAs(t+type);
+                break;
+            }
+            case 6:
+            {
+                TString type = ".svg";
+				c->SaveAs(t+type);
+                break;
+            }
+		}	
+	}
+
+
 }
 
 //Getter

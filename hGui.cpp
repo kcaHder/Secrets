@@ -147,7 +147,7 @@ TGNumberEntry *fitlst;
 TGNumberEntry *fitlcol;
 TGNumberEntry *fitlwd;
 
-TGMainFrame *fMainFrame2;
+TGTransientFrame *fMainFrame2;
 TGCompositeFrame *asd;
 
 TGNumberEntry *En;
@@ -593,10 +593,12 @@ void histogui()
 
 void genparam()
 {
-
-   fMainFrame2 = new TGMainFrame(gClient->GetRoot(),10,10,kMainFrame | kVerticalFrame);
+   //TGClient* vx = new TGClient();
+   //TGWindow* win = new TGWindow(gClient->GetRoot(),fMainFrame1447->GetId());
+   fMainFrame2 = new TGTransientFrame(gClient->GetRoot(),fMainFrame1447,10,10,kVerticalFrame);
    fMainFrame2->SetName("fMainFrame2");
    fMainFrame2->SetLayoutBroken(kTRUE);
+   
 
    asd = new TGCompositeFrame(fMainFrame2,611,451,kVerticalFrame);
    asd->SetName("asd");
@@ -629,6 +631,7 @@ void genparam()
          En = new TGNumberEntry(asd, (Double_t) 0,6,-1,(TGNumberFormat::EStyle) 0, (TGNumberFormat::EAttribute) 1);
          asd->AddFrame(En, new TGLayoutHints(kLHintsLeft | kLHintsTop,2,2,2,2));
          En->MoveResize(156,30,60,23);
+         En->SetNumber(1);
          
 
          TGLabel *fLaben = new TGLabel(asd,"Entries");
@@ -896,37 +899,6 @@ void genparam()
          break;
       }
    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
    fMainFrame2->SetMWMHints(kMWMDecorAll,
                         kMWMFuncAll,

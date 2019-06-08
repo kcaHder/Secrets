@@ -8,7 +8,7 @@ Histogram* H = new Histogram();
 
 #ifdef __linux__
 
-int8_t OS = 2;
+int8_t OS = 1;
 
 #elif __APPLE__ || __MACH__
 
@@ -118,29 +118,33 @@ void Histogram::Filler()
         if(load[0]->IsOn())
         {
             histFile = dir;
-            ifstream file(histFile);
-            vector<float> a;
-
-            TString tdat;
-            while(!file.eof())
-            {
-                file >> tdat;
-                a.push_back(tdat.Atof());
-                tdat = "0";
-            }
-            
-
-            for (std::vector<float>::iterator i = a.begin(); i != a.end(); ++i)
-            {
-                h->Fill(*i);
-            }
-            a.clear();
         }
+        else
+        {
         if(OS == 0) auto a = system("touch filename.txt | open -a TextEdit filename.txt");
         else if (OS == 1) auto a = system("gedit filename.txt");
         else if (OS == 2) auto a = system("echo \"\" > filename.txt || Notepad filename.txt");
         else cerr << "UNABLE TO IDENTIFY OS, ONLY LOADING DATA IS AVAILABLE\n LOADING FILE filename.txt...\n";
-            //Graph(6.9);
+        histFile = "filename.txt";
+        }
+        ifstream file(histFile);
+        vector<float> a;
+
+        TString tdat;
+        while(!file.eof())
+        {
+            file >> tdat;
+            a.push_back(tdat.Atof());
+            tdat = "0";
+        }
+            
+
+        for (std::vector<float>::iterator i = a.begin(); i != a.end(); ++i)
+        {
+            h->Fill(*i);
+        }
+        a.clear();
+
     }
 }
 
